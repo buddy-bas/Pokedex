@@ -19,7 +19,7 @@ struct DetailView: View {
 
         HStack {
             if !loading {
-                ScrollView {
+                ScrollView(showsIndicators: false) {
                     VStack(spacing: 0) {
                         GeometryReader { geo in
                             AsyncImage(url: URL(string: pokemon!.detail.sprites.frontDefault ?? "")) { image in
@@ -38,7 +38,7 @@ struct DetailView: View {
 
                         VStack(spacing: 0) {
                             Text(pokemon!.detail.name.capitalized)
-                                .font(.title3)
+                                .font(.title2)
                                 .fontWeight(.bold)
                                 .padding(.top, 24)
                             Text("# \(pokemon!.detail.id)")
@@ -55,6 +55,7 @@ struct DetailView: View {
                                 Text("Base Stats")
                                     .font(.title3)
                                     .fontWeight(.semibold)
+                                    .textCase(.uppercase)
                                     .padding(.top, 24)
                                     .padding(.bottom, 8)
 
@@ -70,6 +71,7 @@ struct DetailView: View {
                                     Text("Sprites")
                                         .font(.title3)
                                         .fontWeight(.semibold)
+                                        .textCase(.uppercase)
                                         .padding(.top, 24)
                                 }
                                 HStack {

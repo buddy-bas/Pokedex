@@ -17,15 +17,16 @@ struct EvolutionColumn: View {
                 ProgressView()
             }
             .scaledToFit()
-            .frame(width: 80, height: 80)
+            
             Text(evolution.name.capitalized)
                 .font(.title3)
         }
+        .frame(width: 100, height: 100)
     }
 }
 
 struct EvolutionColumn_Previews: PreviewProvider {
     static var previews: some View {
-        EvolutionColumn(evolution: Evolution(id: 1, name: "test", spriteUrl: "test"))
+        EvolutionColumn(evolution: Evolution(id: 1, name: "test", spriteUrl: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/6.png"))
     }
 }

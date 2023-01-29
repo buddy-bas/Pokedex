@@ -16,6 +16,7 @@ struct EvolutionList: View {
                 Text("Evolution")
                     .font(.title3)
                     .fontWeight(.semibold)
+                    .textCase(.uppercase)
                 HStack {
                     ForEach(Array(pokemon!.evolution.enumerated()), id: \.element) {
                         index, item in

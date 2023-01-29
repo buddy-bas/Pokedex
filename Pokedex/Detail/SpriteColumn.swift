@@ -20,35 +20,40 @@ struct SpriteColumn: View {
                     .fontWeight(.medium)
             }
             if frontUrl != nil {
-                Text("Front")
-                    .spriteModifier()
-                    .padding(.top, 4)
-                AsyncImage(url: URL(string: frontUrl!)) { image in
-                    image.resizable()
-                } placeholder: {
-                    ProgressView()
+                VStack{
+                    Text("Front")
+                        .spriteModifier()
+                        .padding(.top, 4)
+                    AsyncImage(url: URL(string: frontUrl!)) { image in
+                        image.resizable()
+                    } placeholder: {
+                        ProgressView()
+                    }
+                    .scaledToFit()
                 }
                 .spriteModifier()
-                .padding(.top)
             }
             if backUrl != nil {
-                Text("Back")
-                    .spriteModifier()
-                AsyncImage(url: URL(string: backUrl!)) { image in
-                    image.resizable()
-                } placeholder: {
-                    ProgressView()
+                VStack{
+                    Text("Back")
+                        .spriteModifier()
+                    AsyncImage(url: URL(string: backUrl!)) { image in
+                        image.resizable()
+                    } placeholder: {
+                        ProgressView()
+                    }
+                    .scaledToFit()
                 }
                 .spriteModifier()
-                .padding(.top)
+                
             }
         }
     }
 }
 
-extension AsyncImage {
+extension VStack {
     func spriteModifier() -> some View {
-        scaledToFit()
+        self
             .frame(width: 100, height: 100)
     }
 }
@@ -61,6 +66,6 @@ private extension Text {
 
 struct SpriteColumn_Previews: PreviewProvider {
     static var previews: some View {
-        SpriteColumn(title: "Normal", frontUrl: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png", backUrl: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png")
+        SpriteColumn(title: "Normal", frontUrl: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/6.png", backUrl: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/6.png")
     }
 }
