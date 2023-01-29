@@ -26,69 +26,66 @@ struct DetailView: View {
                             ProgressView()
                         }
                         .frame(width: 200, height: 200, alignment: .center)
-                        VStack {
+                        VStack(spacing:0) {
                             Text(pokemon!.detail.name.capitalized)
-                                .font(.title)
+                                .font(.title3)
                                 .fontWeight(.bold)
-
+                                .padding(.top, 24)
                             Text("# \(pokemon!.detail.id)")
-                                .font(.title2)
+                                .font(.title3)
+                            TypeCardList()
+                                .padding(.vertical,16)
                             HStack {
-                                ForEach(pokemon!.detail.types) {
-                                    item in TypeCard(name: item.type.name.rawValue, icon: item.type.typeDetail.image, borderColor: item.type.typeDetail.color)
-                                }
-                            }
-                            HStack {
-                                DetailColumn(title: "Weight", value: pokemon?.detail.convertedWeight ?? "")
+                                DetailColumn(title: "Weight", value: pokemon!.detail.convertedWeight)
                                 Rectangle()
-                                    .frame(width: 1)
-                                    .padding(.horizontal, 8)
-                                DetailColumn(title: "Height", value: pokemon?.detail.convertedHeight ?? "")
+                                    .frame(width: 2)
+                                DetailColumn(title: "Height", value: pokemon!.detail.convertedHeight)
                             }
-                            Group {
+                            VStack(spacing:0) {
                                 Text("Base Stats")
-                                    .font(.title2)
-                                    .fontWeight(.bold)
+                                    .font(.title3)
+                                    .fontWeight(.semibold)
+                                    .padding(.top,24)
+                                    .padding(.bottom,8)
+                                   
                                 ForEach(pokemon!.detail.stats, id: \.self) {
                                     item in
                                     StatRow(status: item, barColor: pokemon!.detail.types[0].type.typeDetail.color)
+                                        .padding(.top,8)
                                 }
                             }
-                            Group {
+                            .padding(.horizontal, 24)
+                            VStack(spacing:0) {
                                 if pokemon!.detail.sprites.frontDefault != nil {
                                     Text("Sprites")
-                                        .font(.title2)
-                                        .fontWeight(.bold)
+                                        .font(.title3)
+                                        .fontWeight(.semibold)
+                                        .padding(.top,24)
+//                                        .padding(.bottom,8)
                                 }
                                 HStack {
                                     SpriteColumn(title: "Normal", frontUrl: pokemon?.detail.sprites.frontDefault, backUrl: pokemon?.detail.sprites.backDefault)
                                     SpriteColumn(title: "Shiny", frontUrl: pokemon?.detail.sprites.frontShiny, backUrl: pokemon?.detail.sprites.backShiny)
                                 }
+                                .padding(.top)
                             }
-                            if pokemon!.evolution.count > 0 {
-                                Group {
-                                    Text("Evolution")
-                                        .font(.title2)
-                                        .fontWeight(.bold)
-                                    HStack {
-                                        ForEach(Array(pokemon!.evolution.enumerated()), id: \.element) {
-                                            index, item in
-                                            EvolutionColumn(evolution: item)
-                                            if index < (pokemon!.evolution.count - 1) {
-                                                Image(systemName: "arrow.right")
-                                                    .resizable()
-                                                    .frame(width: 15, height: 15)
-                                            }
-                                        }
-                                    }
-                                }
-                            }
+                            EvolutionList()
+                                .padding(.top,24)
                         }
                         .frame(maxWidth: .infinity)
                         .background(.white)
                         .cornerRadius(radius: 30, corners: [.topLeft, .topRight])
                     }
-                    .padding(.top, 44 + 20)
+                    .padding(.top, UIApplication
+                        .shared
+                        .connectedScenes
+                        .flatMap { ($0 as? UIWindowScene)?.windows ?? [] }
+        .first { $0.isKeyWindow }?.safeAreaInsets.top )
+                    .padding(.bottom,  UIApplication
+                        .shared
+                        .connectedScenes
+                        .flatMap { ($0 as? UIWindowScene)?.windows ?? [] }
+                        .first { $0.isKeyWindow }?.safeAreaInsets.bottom ?? 20.0)
                     .background(pokemon?.detail.types[0].type.typeDetail.color)
                 }
             } else {
@@ -106,6 +103,7 @@ struct DetailView: View {
                 loading = false
             }
         }
+       
         .background(.white)
         .ignoresSafeArea()
     }
@@ -118,7 +116,7 @@ struct DetailView_Previews: PreviewProvider {
             .environmentObject(model)
             .previewDevice(PreviewDevice(rawValue: "iPhone 14 Pro Max"))
             .previewDisplayName("iPhone 14 Pro Max")
-        DetailView(pokemonId: 1)
+        DetailView(pokemonId: 1008)
             .environmentObject(model)
             .previewDevice(PreviewDevice(rawValue: "iPhone 14"))
             .previewDisplayName("iPhone 14")

@@ -12,13 +12,15 @@ struct DetailColumn: View {
     let value: String
 
     var body: some View {
-        VStack {
+        VStack(spacing: 0) {
             Text(value)
-                .font(.title2)
-                .fontWeight(.semibold)
-            Text(title)
                 .font(.title3)
+                .fontWeight(.medium)
+            Text(title)
+                .font(.subheadline)
+                .padding(.top, 4)
         }
+        .frame(width: 100)
     }
 }
 

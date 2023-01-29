@@ -18,13 +18,14 @@ struct EvolutionColumn: View {
             }
             .scaledToFit()
             .frame(width: 80, height: 80)
-            Text(evolution.name)
+            Text(evolution.name.capitalized)
+                .font(.title3)
         }
     }
 }
 
 struct EvolutionColumn_Previews: PreviewProvider {
     static var previews: some View {
-        EvolutionColumn(evolution: Evolution(id:1,name: "test", spriteUrl: "test"))
+        EvolutionColumn(evolution: Evolution(id: 1, name: "test", spriteUrl: "test"))
     }
 }

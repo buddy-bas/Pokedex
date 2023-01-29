@@ -10,7 +10,7 @@ import SwiftUI
 
 // MARK: - TypeElement
 
-struct TypeElement: Codable, Identifiable {
+struct TypeElement: Codable, Identifiable, Hashable {
     var id: UUID {
         UUID()
     }
@@ -20,7 +20,7 @@ struct TypeElement: Codable, Identifiable {
 
     // MARK: - PokemonType
 
-    struct PokemonType: Codable {
+    struct PokemonType: Codable, Hashable {
         let name: TypeKeys
         var typeDetail: TypeDetail {
             TypeElement.getDisplayPokemonType(typeName: name)
