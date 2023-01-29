@@ -29,7 +29,7 @@ struct SpriteColumn: View {
                     ProgressView()
                 }
                 .spriteModifier()
-                .padding()
+                .padding(.top)
             }
             if backUrl != nil {
                 Text("Back")
@@ -40,7 +40,7 @@ struct SpriteColumn: View {
                     ProgressView()
                 }
                 .spriteModifier()
-                .padding()
+                .padding(.top)
             }
         }
     }

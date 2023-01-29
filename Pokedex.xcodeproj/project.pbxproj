@@ -14,8 +14,6 @@
 		B2695ADB298290F4008A0153 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2695ADA298290F4008A0153 /* Helper.swift */; };
 		B2695ADF2982CEA2008A0153 /* Evolution.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2695ADE2982CEA2008A0153 /* Evolution.swift */; };
 		B26AA72B2985483500D72A7C /* EvolutionColumn.swift in Sources */ = {isa = PBXBuildFile; fileRef = B26AA72A2985483500D72A7C /* EvolutionColumn.swift */; };
-		B2747B092973041C00209F8A /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = B2747B082973041C00209F8A /* SDWebImageSwiftUI */; };
-		B2747B0C2973043C00209F8A /* SDWebImageSVGCoder in Frameworks */ = {isa = PBXBuildFile; productRef = B2747B0B2973043C00209F8A /* SDWebImageSVGCoder */; };
 		B2747B122973ED0A00209F8A /* DetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2747B112973ED0A00209F8A /* DetailView.swift */; };
 		B2747B142973EE3C00209F8A /* DetailColumn.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2747B132973EE3C00209F8A /* DetailColumn.swift */; };
 		B2747B162973F2FF00209F8A /* StatBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2747B152973F2FF00209F8A /* StatBar.swift */; };
@@ -90,8 +88,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B2747B092973041C00209F8A /* SDWebImageSwiftUI in Frameworks */,
-				B2747B0C2973043C00209F8A /* SDWebImageSVGCoder in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -276,8 +272,6 @@
 			);
 			name = Pokedex;
 			packageProductDependencies = (
-				B2747B082973041C00209F8A /* SDWebImageSwiftUI */,
-				B2747B0B2973043C00209F8A /* SDWebImageSVGCoder */,
 			);
 			productName = Pokedex;
 			productReference = B293F01729729BE0002B1B08 /* Pokedex.app */;
@@ -352,8 +346,6 @@
 			);
 			mainGroup = B293F00E29729BDF002B1B08;
 			packageReferences = (
-				B2747B072973041C00209F8A /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
-				B2747B0A2973043C00209F8A /* XCRemoteSwiftPackageReference "SDWebImageSVGCoder" */,
 			);
 			productRefGroup = B293F01829729BE0002B1B08 /* Products */;
 			projectDirPath = "";
@@ -581,6 +573,8 @@
 				INFOPLIST_FILE = Pokedex/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UIRequiresFullScreen = YES;
+				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -609,6 +603,8 @@
 				INFOPLIST_FILE = Pokedex/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UIRequiresFullScreen = YES;
+				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -739,38 +735,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		B2747B072973041C00209F8A /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/SDWebImage/SDWebImageSwiftUI.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.0.0;
-			};
-		};
-		B2747B0A2973043C00209F8A /* XCRemoteSwiftPackageReference "SDWebImageSVGCoder" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/SDWebImage/SDWebImageSVGCoder";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.0;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		B2747B082973041C00209F8A /* SDWebImageSwiftUI */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = B2747B072973041C00209F8A /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */;
-			productName = SDWebImageSwiftUI;
-		};
-		B2747B0B2973043C00209F8A /* SDWebImageSVGCoder */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = B2747B0A2973043C00209F8A /* XCRemoteSwiftPackageReference "SDWebImageSVGCoder" */;
-			productName = SDWebImageSVGCoder;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = B293F00F29729BDF002B1B08 /* Project object */;
 }

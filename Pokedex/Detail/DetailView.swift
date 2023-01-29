@@ -5,7 +5,7 @@
 //  Created by Bundit Thakummee on 15/1/2566 BE.
 //
 
-import SDWebImageSwiftUI
+
 import SwiftUI
 
 struct DetailView: View {
