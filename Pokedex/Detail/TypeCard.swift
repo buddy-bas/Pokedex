@@ -20,7 +20,7 @@ struct TypeCard: View {
         }
         .padding(.horizontal, 10)
         .padding(.vertical, 6)
-        .frame(width: 120,height: 40)
+        .frame(width: 120, height: 40)
         .overlay(
             RoundedRectangle(cornerRadius: 8)
                 .stroke(borderColor, lineWidth: 1)

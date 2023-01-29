@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// MARK: - ConditionalModifier
 extension View {
     // If condition is met, apply modifier, otherwise, leave the view untouched
      func conditionalModifier<T>(_ condition: Bool, _ modifier: T) -> some View where T: ViewModifier {
@@ -31,4 +32,26 @@ extension View {
     }
 }
 
+// MARK: - SafeAreaInset
+private struct SafeAreaInsetsKey: EnvironmentKey {
+    static var defaultValue: EdgeInsets {
+        UIApplication
+            .shared
+            .connectedScenes
+            .flatMap { ($0 as? UIWindowScene)?.windows ?? [] }
+            .first { $0.isKeyWindow }?.safeAreaInsets.insets ?? EdgeInsets()
+    }
+}
+
+extension EnvironmentValues {
+    var safeAreaInsets: EdgeInsets {
+        self[SafeAreaInsetsKey.self]
+    }
+}
+
+private extension UIEdgeInsets {
+    var insets: EdgeInsets {
+        EdgeInsets(top: top, leading: left, bottom: bottom, trailing: right)
+    }
+}
 

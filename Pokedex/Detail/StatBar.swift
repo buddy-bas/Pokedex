@@ -12,7 +12,8 @@ struct StatBar: View {
 
     var statValue: Double
     let color: Color
-    let width: CGFloat
+    let width: Double
+
     func percentStatValue(_ w: Double) -> Double {
         guard statValue < 255 else {
             return 255
@@ -21,20 +22,18 @@ struct StatBar: View {
     }
 
     var body: some View {
-//        GeometryReader { geo in
-            ZStack(alignment: .leading) {
-                RoundedRectangle(cornerRadius: 3)
-                    .fill(Color(.systemGray5))
-                RoundedRectangle(cornerRadius: 3)
-                    .fill(color)
-                    .frame(width: showStat ? percentStatValue(width) : 0, alignment: .leading)
-                    .animation(Animation.easeOut(duration: 1.5), value: showStat)
-            }
-            .frame(width: width * 1, height: 12)
-            .onAppear {
-                showStat.toggle()
-            }
-//        }
+        ZStack(alignment: .leading) {
+            RoundedRectangle(cornerRadius: 3)
+                .fill(Color(.systemGray5))
+            RoundedRectangle(cornerRadius: 3)
+                .fill(color)
+                .frame(width: showStat ? percentStatValue(width) : 0, alignment: .leading)
+                .animation(Animation.easeOut(duration: 1.5), value: showStat)
+        }
+        .frame(width: width * 1, height: 12)
+        .onAppear {
+            showStat.toggle()
+        }
     }
 }
 

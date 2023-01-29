@@ -9,6 +9,7 @@ import SDWebImageSwiftUI
 import SwiftUI
 
 struct DetailView: View {
+    @Environment(\.safeAreaInsets) private var safeAreaInsets
     @EnvironmentObject var model: Model
     @State private var loading = true
     var pokemonId: UInt
@@ -26,7 +27,7 @@ struct DetailView: View {
                             ProgressView()
                         }
                         .frame(width: 200, height: 200, alignment: .center)
-                        VStack(spacing:0) {
+                        VStack(spacing: 0) {
                             Text(pokemon!.detail.name.capitalized)
                                 .font(.title3)
                                 .fontWeight(.bold)
@@ -34,34 +35,33 @@ struct DetailView: View {
                             Text("# \(pokemon!.detail.id)")
                                 .font(.title3)
                             TypeCardList()
-                                .padding(.vertical,16)
+                                .padding(.vertical, 16)
                             HStack {
                                 DetailColumn(title: "Weight", value: pokemon!.detail.convertedWeight)
                                 Rectangle()
                                     .frame(width: 2)
                                 DetailColumn(title: "Height", value: pokemon!.detail.convertedHeight)
                             }
-                            VStack(spacing:0) {
+                            VStack(spacing: 0) {
                                 Text("Base Stats")
                                     .font(.title3)
                                     .fontWeight(.semibold)
-                                    .padding(.top,24)
-                                    .padding(.bottom,8)
-                                   
+                                    .padding(.top, 24)
+                                    .padding(.bottom, 8)
+
                                 ForEach(pokemon!.detail.stats, id: \.self) {
                                     item in
                                     StatRow(status: item, barColor: pokemon!.detail.types[0].type.typeDetail.color)
-                                        .padding(.top,8)
+                                        .padding(.top, 8)
                                 }
                             }
                             .padding(.horizontal, 24)
-                            VStack(spacing:0) {
+                            VStack(spacing: 0) {
                                 if pokemon!.detail.sprites.frontDefault != nil {
                                     Text("Sprites")
                                         .font(.title3)
                                         .fontWeight(.semibold)
-                                        .padding(.top,24)
-//                                        .padding(.bottom,8)
+                                        .padding(.top, 24)
                                 }
                                 HStack {
                                     SpriteColumn(title: "Normal", frontUrl: pokemon?.detail.sprites.frontDefault, backUrl: pokemon?.detail.sprites.backDefault)
@@ -70,22 +70,14 @@ struct DetailView: View {
                                 .padding(.top)
                             }
                             EvolutionList()
-                                .padding(.top,24)
+                                .padding(.top, 24)
                         }
                         .frame(maxWidth: .infinity)
                         .background(.white)
                         .cornerRadius(radius: 30, corners: [.topLeft, .topRight])
                     }
-                    .padding(.top, UIApplication
-                        .shared
-                        .connectedScenes
-                        .flatMap { ($0 as? UIWindowScene)?.windows ?? [] }
-        .first { $0.isKeyWindow }?.safeAreaInsets.top )
-                    .padding(.bottom,  UIApplication
-                        .shared
-                        .connectedScenes
-                        .flatMap { ($0 as? UIWindowScene)?.windows ?? [] }
-                        .first { $0.isKeyWindow }?.safeAreaInsets.bottom ?? 20.0)
+                    .padding(.top, safeAreaInsets.top)
+                    .padding(.bottom, safeAreaInsets.bottom != 0.0 ? safeAreaInsets.bottom : 20)
                     .background(pokemon?.detail.types[0].type.typeDetail.color)
                 }
             } else {
@@ -103,7 +95,7 @@ struct DetailView: View {
                 loading = false
             }
         }
-       
+
         .background(.white)
         .ignoresSafeArea()
     }
