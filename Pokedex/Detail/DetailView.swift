@@ -20,13 +20,22 @@ struct DetailView: View {
         HStack {
             if !loading {
                 ScrollView {
-                    VStack {
-                        AsyncImage(url: URL(string: pokemon!.detail.sprites.frontDefault ?? "")) { image in
-                            image.resizable()
-                        } placeholder: {
-                            ProgressView()
+                    VStack(spacing: 0) {
+                        GeometryReader { geo in
+                            AsyncImage(url: URL(string: pokemon!.detail.sprites.frontDefault ?? "")) { image in
+                                image.resizable()
+                            } placeholder: {
+                                ProgressView()
+                            }
+                            .scaledToFit()
+                            .padding(.top, safeAreaInsets.top)
+                            .padding(.bottom, 38)
+                            .frame(width: geo.size.width, height: GeometryHelper.getHeightForHeaderImage(geo), alignment: .center)
+                            .background(pokemon!.detail.types[0].type.typeDetail.color)
+                            .offset(x: 0, y: GeometryHelper.getOffsetForHeaderImage(geo))
                         }
-                        .frame(width: 200, height: 200, alignment: .center)
+                        .frame(height: 300)
+
                         VStack(spacing: 0) {
                             Text(pokemon!.detail.name.capitalized)
                                 .font(.title3)
@@ -75,11 +84,11 @@ struct DetailView: View {
                         .frame(maxWidth: .infinity)
                         .background(.white)
                         .cornerRadius(radius: 30, corners: [.topLeft, .topRight])
+                        .offset(y: -30)
                     }
-                    .padding(.top, safeAreaInsets.top)
-                    .padding(.bottom, safeAreaInsets.bottom != 0.0 ? safeAreaInsets.bottom : 20)
-                    .background(pokemon?.detail.types[0].type.typeDetail.color)
+                    .ignoresSafeArea()
                 }
+
             } else {
                 Text("Loading")
             }
@@ -108,7 +117,7 @@ struct DetailView_Previews: PreviewProvider {
             .environmentObject(model)
             .previewDevice(PreviewDevice(rawValue: "iPhone 14 Pro Max"))
             .previewDisplayName("iPhone 14 Pro Max")
-        DetailView(pokemonId: 1008)
+        DetailView(pokemonId: 6)
             .environmentObject(model)
             .previewDevice(PreviewDevice(rawValue: "iPhone 14"))
             .previewDisplayName("iPhone 14")
