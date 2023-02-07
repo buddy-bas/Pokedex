@@ -10,6 +10,7 @@ import Foundation
 class Model: ObservableObject {
     var services: Services
     @Published var pokemon: Pokemon?
+    @Published var pokemonList: PokemonList?
 
     init(services: Services = Services(pokemonService: PokemonService())) {
         self.services = services
@@ -36,9 +37,9 @@ extension Model {
     }
 
     @MainActor
-    func loadPokemon(id pokemonId: UInt) async throws {
+    func loadPokemon(from url: String) async throws {
         // get pokemon detail
-        let detail = try await services.pokemonService.getPokemonDetail(id: pokemonId)
+        let detail = try await services.pokemonService.getPokemonDetail(from: url)
         pokemon = Pokemon(detail: detail, evolution: [])
 
         // get pokemon evolution
@@ -53,11 +54,18 @@ extension Model {
             }
             var evoArr = [Evolution]()
             for try await result in group {
-                let evoDetail = try await services.pokemonService.getPokemonDetail(id: result.id)
+                let evoDetail = try await services.pokemonService.getPokemonDetail(from:"https://pokeapi.co/api/v2/pokemon/\(result.id)")
                 evoArr.append(Evolution(id: evoDetail.id, name: evoDetail.name, spriteUrl: evoDetail.sprites.frontDefault ?? ""))
             }
             return evoArr.sorted { $0.id < $1.id }
         }
         pokemon?.evolution = evolution
+    }
+    
+    @MainActor
+    func loadPokemonList(url:String) async throws {
+        // get pokemon list
+        let pokemonList = try await services.pokemonService.getPokemonList(url: url)
+        self.pokemonList = pokemonList
     }
 }

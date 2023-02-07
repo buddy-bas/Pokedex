@@ -8,12 +8,18 @@
 import SwiftUI
 
 struct ListViewItem: View {
+    let name: String
+    let detailUrl: String
+    let pokemonId: Int
+    @State private var imageUrl = ""
+    @State private var types:[TypeElement] = []
+    
     var body: some View {
         HStack {
-            Text("1000")
+            Text("\(pokemonId)")
                 .font(.subheadline)
                 .fontWeight(.bold)
-            AsyncImage(url: URL(string: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/3.png")) { image in
+            AsyncImage(url: URL(string: imageUrl)) { image in
                 image.resizable()
             } placeholder: {
                 ProgressView()
@@ -21,34 +27,51 @@ struct ListViewItem: View {
             .scaledToFit()
             .frame(width: 40, height: 40)
             .padding(4)
-
             .clipShape(Circle())
-            Text("kdfopjsdopkdsocsdopkcopsdkcodskc")
+            Text(name)
                 .font(.subheadline)
                 .fontWeight(.medium)
                 .lineLimit(1)
                 .frame(width: 100)
             Spacer()
             HStack(spacing: 4) {
-                Image("Pokemon_Type_Icon_Bug")
-                    .resizable()
-                    .frame(width: 20, height: 20)
-                Image("Pokemon_Type_Icon_Fighting")
-                    .resizable()
-                    .frame(width: 20, height: 20)
+                ForEach(types) { item in
+                    item.type.typeDetail.image
+                        .resizable()
+                        .frame(width: 20, height: 20)
+                }
             }
-
+            
             Spacer()
             Image(systemName: "star")
                 .resizable()
                 .frame(width: 20, height: 20)
         }
-      
+        .task {
+            do {
+                let url = URL(string: detailUrl)!
+                let (data, response) = try await URLSession.shared.data(from: url)
+                
+                guard let httpResponse = response as? HTTPURLResponse,
+                      httpResponse.statusCode == 200 else {
+                    throw "\(#function) invalidServerResponse"
+                }
+                guard let decodedResponse = try? JSONDecoder().decode(PokemonDetail.self, from: data) else {
+                    throw "Can't decode \(#function)."
+                }
+                types =  decodedResponse.types
+                imageUrl = decodedResponse.sprites.frontDefault ?? ""
+                
+                
+            } catch {
+                print(error)
+            }
+        }
     }
 }
 
 struct ListViewItem_Previews: PreviewProvider {
     static var previews: some View {
-        ListViewItem()
+        ListViewItem(name: "TEST", detailUrl: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png", pokemonId: 1)
     }
 }

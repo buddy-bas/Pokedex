@@ -14,6 +14,25 @@ struct Pokemon: Codable {
     var evolution: [Evolution]
 }
 
+// MARK: - PokemonListItem
+
+struct PokemonListItem: Codable, Identifiable {
+
+    var id: UUID {
+        UUID()
+    }
+
+    let name, url: String
+}
+
+// MARK: - PokemonList
+
+struct PokemonList: Codable {
+    let count: Int
+    var results: [PokemonListItem]
+    var next: String
+}
+
 // MARK: - PokemonDetail
 
 struct PokemonDetail: Codable {
@@ -37,7 +56,7 @@ struct PokemonDetail: Codable {
 // MARK: - Species
 
 struct Species: Codable {
-    let id:UInt?
+    let id: UInt?
     let name, url: String
 }
 

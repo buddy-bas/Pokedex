@@ -12,11 +12,10 @@ struct DetailView: View {
     @Environment(\.safeAreaInsets) private var safeAreaInsets
     @EnvironmentObject var model: Model
     @State private var loading = true
-    var pokemonId: UInt
+    var url: String
 
     var body: some View {
         let pokemon = model.pokemon
-
         HStack {
             if !loading {
                 ScrollView(showsIndicators: false) {
@@ -97,8 +96,7 @@ struct DetailView: View {
         }
         .task {
             do {
-                try await model.loadPokemon(id: pokemonId)
-
+                try await model.loadPokemon(from: url)
             } catch {
                 print(error)
             }
@@ -106,7 +104,6 @@ struct DetailView: View {
                 loading = false
             }
         }
-
         .background(.white)
         .ignoresSafeArea()
     }
@@ -115,15 +112,15 @@ struct DetailView: View {
 struct DetailView_Previews: PreviewProvider {
     static let model = Model()
     static var previews: some View {
-        DetailView(pokemonId: 6)
+        DetailView(url: "https://pokeapi.co/api/v2/pokemon/10")
             .environmentObject(model)
             .previewDevice(PreviewDevice(rawValue: "iPhone 14 Pro Max"))
             .previewDisplayName("iPhone 14 Pro Max")
-        DetailView(pokemonId: 6)
+        DetailView(url: "https://pokeapi.co/api/v2/pokemon/10")
             .environmentObject(model)
             .previewDevice(PreviewDevice(rawValue: "iPhone 14"))
             .previewDisplayName("iPhone 14")
-        DetailView(pokemonId: 6)
+        DetailView(url: "https://pokeapi.co/api/v2/pokemon/10")
             .environmentObject(model)
             .previewDevice(PreviewDevice(rawValue: "iPhone SE (3rd generation)"))
             .previewDisplayName("iPhone SE")

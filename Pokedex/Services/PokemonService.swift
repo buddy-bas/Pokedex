@@ -11,7 +11,8 @@ import Foundation
 protocol PokemonServiceProtocol {
     typealias url = String
     
-    func getPokemonDetail(id pokemonId: UInt) async throws -> PokemonDetail
+    func getPokemonList(url:String) async throws -> PokemonList
+    func getPokemonDetail(from url: String) async throws -> PokemonDetail
     func getSpecies(from speciesUrl: url) async throws -> SpeciesRawResponse
     func getRawEvolution(from evolutionUrl: url) async throws -> EvolutionRawResponse
 }
@@ -39,8 +40,23 @@ enum PokemonServiceError: Error {
 
 class PokemonService:PokemonServiceProtocol {
     
-    func getPokemonDetail(id pokemonId: UInt) async throws -> PokemonDetail {
-        let url = URL(string: "https://pokeapi.co/api/v2/pokemon/\(pokemonId)")!
+    func getPokemonList(url:String) async throws -> PokemonList {
+        let url = URL(string: url)!
+        let (data, response) = try await URLSession.shared.data(from: url)
+        
+        guard let httpResponse = response as? HTTPURLResponse,
+              httpResponse.statusCode == 200 else {
+            throw "\(#function) invalidServerResponse"
+        }
+        
+        guard let decodedResponse = try? JSONDecoder().decode(PokemonList.self, from: data) else {
+            throw "Can't decode \(#function)."
+        }
+        return decodedResponse
+    }
+    
+    func getPokemonDetail(from url: String) async throws -> PokemonDetail {
+        let url = URL(string: url)!
         let (data, response) = try await URLSession.shared.data(from: url)
 
         guard let httpResponse = response as? HTTPURLResponse,

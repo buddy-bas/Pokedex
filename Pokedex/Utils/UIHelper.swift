@@ -57,6 +57,7 @@ private extension UIEdgeInsets {
     }
 }
 
+// MARK: - GeometryHelper
 struct GeometryHelper {
     static func getScrollOffset(_ geometry: GeometryProxy) -> CGFloat {
         geometry.frame(in: .global).minY
@@ -79,3 +80,4 @@ struct GeometryHelper {
         return imageHeight
     }
 }
+
