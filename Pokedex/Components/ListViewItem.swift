@@ -11,10 +11,14 @@ struct ListViewItem: View {
     let name: String
     let detailUrl: String
     let pokemonId: Int
+    var showFavoriteIcon: Bool = true
     @State private var imageUrl = ""
+    @State private var isSet = false
     @State private var types:[TypeElement] = []
+    @EnvironmentObject var model:Model
     
     var body: some View {
+        let _ = Self._printChanges()
         HStack {
             Text("\(pokemonId)")
                 .font(.subheadline)
@@ -41,17 +45,16 @@ struct ListViewItem: View {
                         .frame(width: 20, height: 20)
                 }
             }
-            
-            Spacer()
-            Image(systemName: "star")
-                .resizable()
-                .frame(width: 20, height: 20)
+            if showFavoriteIcon {
+                Spacer()
+                FavoriteButton(isSet: $isSet)
+            }
         }
         .task {
             do {
                 let url = URL(string: detailUrl)!
                 let (data, response) = try await URLSession.shared.data(from: url)
-                
+
                 guard let httpResponse = response as? HTTPURLResponse,
                       httpResponse.statusCode == 200 else {
                     throw "\(#function) invalidServerResponse"
@@ -61,8 +64,8 @@ struct ListViewItem: View {
                 }
                 types =  decodedResponse.types
                 imageUrl = decodedResponse.sprites.frontDefault ?? ""
-                
-                
+
+
             } catch {
                 print(error)
             }

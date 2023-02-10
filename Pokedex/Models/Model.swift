@@ -9,8 +9,13 @@ import Foundation
 
 class Model: ObservableObject {
     var services: Services
-    @Published var pokemon: Pokemon?
-    @Published var pokemonList: PokemonList?
+    var tabViewState = TabViewState()
+    var pokemonState = PokemonState()
+    var pokemonListState = PokemonListState()
+    var favoritesState = FavoritesState()
+   
+   
+    
 
     init(services: Services = Services(pokemonService: PokemonService())) {
         self.services = services
@@ -40,7 +45,7 @@ extension Model {
     func loadPokemon(from url: String) async throws {
         // get pokemon detail
         let detail = try await services.pokemonService.getPokemonDetail(from: url)
-        pokemon = Pokemon(detail: detail, evolution: [])
+        pokemonState.pokemon = Pokemon(detail: detail, evolution: [])
 
         // get pokemon evolution
         let species = try await services.pokemonService.getSpecies(from: detail.species.url)
@@ -59,13 +64,42 @@ extension Model {
             }
             return evoArr.sorted { $0.id < $1.id }
         }
-        pokemon?.evolution = evolution
+        pokemonState.pokemon?.evolution = evolution
     }
     
     @MainActor
     func loadPokemonList(url:String) async throws {
         // get pokemon list
         let pokemonList = try await services.pokemonService.getPokemonList(url: url)
-        self.pokemonList = pokemonList
+        pokemonListState.pokemonList = pokemonList
     }
 }
+
+// MARK: - Manage favorites
+
+extension Model {
+    
+}
+
+enum Tabs {
+    case home
+    case fav
+}
+
+class TabViewState: ObservableObject {
+  
+  @Published var selectedTab: Tabs = .home
+}
+
+
+class PokemonState: ObservableObject {
+    @Published var pokemon: Pokemon?
+}
+class PokemonListState: ObservableObject {
+    @Published var pokemonList: PokemonList?
+}
+
+class FavoritesState: ObservableObject {
+    @Published var favorites: [PokemonListItem] = []
+}
+

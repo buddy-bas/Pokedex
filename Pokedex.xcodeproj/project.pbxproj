@@ -23,6 +23,8 @@
 		B2747B192973F98000209F8A /* CornerRaduisModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2747B182973F98000209F8A /* CornerRaduisModifier.swift */; };
 		B2747B1D2974040000209F8A /* UIHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2747B1C2974040000209F8A /* UIHelper.swift */; };
 		B27D0F8929745ACD00BAC32F /* SpriteColumn.swift in Sources */ = {isa = PBXBuildFile; fileRef = B27D0F8829745ACD00BAC32F /* SpriteColumn.swift */; };
+		B2802B7A2992369A007AE3BA /* FavoritesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2802B792992369A007AE3BA /* FavoritesView.swift */; };
+		B2802B7C299254D8007AE3BA /* FavoriteButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2802B7B299254D8007AE3BA /* FavoriteButton.swift */; };
 		B286A7B7298537950018C7A3 /* StatRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = B286A7B6298537950018C7A3 /* StatRow.swift */; };
 		B293F01B29729BE0002B1B08 /* PokedexApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B293F01A29729BE0002B1B08 /* PokedexApp.swift */; };
 		B293F01D29729BE0002B1B08 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B293F01C29729BE0002B1B08 /* ContentView.swift */; };
@@ -72,6 +74,8 @@
 		B2747B182973F98000209F8A /* CornerRaduisModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CornerRaduisModifier.swift; sourceTree = "<group>"; };
 		B2747B1C2974040000209F8A /* UIHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIHelper.swift; sourceTree = "<group>"; };
 		B27D0F8829745ACD00BAC32F /* SpriteColumn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpriteColumn.swift; sourceTree = "<group>"; };
+		B2802B792992369A007AE3BA /* FavoritesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesView.swift; sourceTree = "<group>"; };
+		B2802B7B299254D8007AE3BA /* FavoriteButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteButton.swift; sourceTree = "<group>"; };
 		B286A7B6298537950018C7A3 /* StatRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatRow.swift; sourceTree = "<group>"; };
 		B293F01729729BE0002B1B08 /* Pokedex.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pokedex.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B293F01A29729BE0002B1B08 /* PokedexApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokedexApp.swift; sourceTree = "<group>"; };
@@ -118,7 +122,6 @@
 			isa = PBXGroup;
 			children = (
 				B250774729894C8A00483147 /* HomeView.swift */,
-				B250774929894D9C00483147 /* ListViewItem.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -163,6 +166,14 @@
 			path = Utils;
 			sourceTree = "<group>";
 		};
+		B2802B76299235B2007AE3BA /* Favorites */ = {
+			isa = PBXGroup;
+			children = (
+				B2802B792992369A007AE3BA /* FavoritesView.swift */,
+			);
+			path = Favorites;
+			sourceTree = "<group>";
+		};
 		B293F00E29729BDF002B1B08 = {
 			isa = PBXGroup;
 			children = (
@@ -193,6 +204,7 @@
 				B2747B0D297309E100209F8A /* Detail */,
 				B250774629894AF800483147 /* Home */,
 				B293F04B2972D0CC002B1B08 /* Navigation */,
+				B2802B76299235B2007AE3BA /* Favorites */,
 				B293F04929729F2D002B1B08 /* Resources */,
 				B293F04829729F10002B1B08 /* Services */,
 				B293F04529729C36002B1B08 /* Models */,
@@ -233,6 +245,8 @@
 		B293F04429729C06002B1B08 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				B250774929894D9C00483147 /* ListViewItem.swift */,
+				B2802B7B299254D8007AE3BA /* FavoriteButton.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -424,8 +438,10 @@
 				B2A04CE72985A4D9008F4573 /* TypeCardList.swift in Sources */,
 				B250774329893EA000483147 /* TabBarNavigation.swift in Sources */,
 				B24C9A632976EE2E0094C677 /* Model.swift in Sources */,
+				B2802B7C299254D8007AE3BA /* FavoriteButton.swift in Sources */,
 				B2B739DE29802766000B1C46 /* PokemonType.swift in Sources */,
 				B2747B142973EE3C00209F8A /* DetailColumn.swift in Sources */,
+				B2802B7A2992369A007AE3BA /* FavoritesView.swift in Sources */,
 				B2747B1D2974040000209F8A /* UIHelper.swift in Sources */,
 				B2695ADF2982CEA2008A0153 /* Evolution.swift in Sources */,
 				B2A04CEB2985AA3C008F4573 /* EvolutionList.swift in Sources */,

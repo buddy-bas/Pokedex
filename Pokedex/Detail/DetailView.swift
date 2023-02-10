@@ -10,18 +10,18 @@ import SwiftUI
 
 struct DetailView: View {
     @Environment(\.safeAreaInsets) private var safeAreaInsets
+    @EnvironmentObject var pokemonState: PokemonState
     @EnvironmentObject var model: Model
     @State private var loading = true
     var url: String
 
     var body: some View {
-        let pokemon = model.pokemon
         HStack {
             if !loading {
                 ScrollView(showsIndicators: false) {
                     VStack(spacing: 0) {
                         GeometryReader { geo in
-                            AsyncImage(url: URL(string: pokemon!.detail.sprites.frontDefault ?? "")) { image in
+                            AsyncImage(url: URL(string: pokemonState.pokemon!.detail.sprites.frontDefault ?? "")) { image in
                                 image.resizable()
                             } placeholder: {
                                 ProgressView()
@@ -30,25 +30,25 @@ struct DetailView: View {
                             .padding(.top, safeAreaInsets.top)
                             .padding(.bottom, 38)
                             .frame(width: geo.size.width, height: GeometryHelper.getHeightForHeaderImage(geo), alignment: .center)
-                            .background(pokemon!.detail.types[0].type.typeDetail.color)
+                            .background(pokemonState.pokemon!.detail.types[0].type.typeDetail.color)
                             .offset(x: 0, y: GeometryHelper.getOffsetForHeaderImage(geo))
                         }
                         .frame(height: 300)
 
                         VStack(spacing: 0) {
-                            Text(pokemon!.detail.name.capitalized)
+                            Text(pokemonState.pokemon!.detail.name.capitalized)
                                 .font(.title2)
                                 .fontWeight(.bold)
                                 .padding(.top, 24)
-                            Text("# \(pokemon!.detail.id)")
+                            Text("# \(pokemonState.pokemon!.detail.id)")
                                 .font(.title3)
                             TypeCardList()
                                 .padding(.vertical, 16)
                             HStack {
-                                DetailColumn(title: "Weight", value: pokemon!.detail.convertedWeight)
+                                DetailColumn(title: "Weight", value: pokemonState.pokemon!.detail.convertedWeight)
                                 Rectangle()
                                     .frame(width: 2)
-                                DetailColumn(title: "Height", value: pokemon!.detail.convertedHeight)
+                                DetailColumn(title: "Height", value: pokemonState.pokemon!.detail.convertedHeight)
                             }
                             VStack(spacing: 0) {
                                 Text("Base Stats")
@@ -58,15 +58,15 @@ struct DetailView: View {
                                     .padding(.top, 24)
                                     .padding(.bottom, 8)
 
-                                ForEach(pokemon!.detail.stats, id: \.self) {
+                                ForEach(pokemonState.pokemon!.detail.stats, id: \.self) {
                                     item in
-                                    StatRow(status: item, barColor: pokemon!.detail.types[0].type.typeDetail.color)
+                                    StatRow(status: item, barColor: pokemonState.pokemon!.detail.types[0].type.typeDetail.color)
                                         .padding(.top, 8)
                                 }
                             }
                             .padding(.horizontal, 24)
                             VStack(spacing: 0) {
-                                if pokemon!.detail.sprites.frontDefault != nil {
+                                if pokemonState.pokemon!.detail.sprites.frontDefault != nil {
                                     Text("Sprites")
                                         .font(.title3)
                                         .fontWeight(.semibold)
@@ -74,8 +74,8 @@ struct DetailView: View {
                                         .padding(.top, 24)
                                 }
                                 HStack {
-                                    SpriteColumn(title: "Normal", frontUrl: pokemon?.detail.sprites.frontDefault, backUrl: pokemon?.detail.sprites.backDefault)
-                                    SpriteColumn(title: "Shiny", frontUrl: pokemon?.detail.sprites.frontShiny, backUrl: pokemon?.detail.sprites.backShiny)
+                                    SpriteColumn(title: "Normal", frontUrl: pokemonState.pokemon?.detail.sprites.frontDefault, backUrl: pokemonState.pokemon?.detail.sprites.backDefault)
+                                    SpriteColumn(title: "Shiny", frontUrl: pokemonState.pokemon?.detail.sprites.frontShiny, backUrl: pokemonState.pokemon?.detail.sprites.backShiny)
                                 }
                                 .padding(.top)
                             }
@@ -87,7 +87,6 @@ struct DetailView: View {
                         .cornerRadius(radius: 30, corners: [.topLeft, .topRight])
                         .offset(y: -30)
                     }
-                    .ignoresSafeArea()
                 }
 
             } else {

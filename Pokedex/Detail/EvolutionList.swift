@@ -8,20 +8,19 @@
 import SwiftUI
 
 struct EvolutionList: View {
-    @EnvironmentObject var model: Model
+    @EnvironmentObject var pokemonState: PokemonState
     var body: some View {
-        let pokemon = model.pokemon
-        if pokemon?.evolution.count ?? 0 > 0 {
+        if pokemonState.pokemon?.evolution.count ?? 0 > 0 {
             VStack(spacing:0){
                 Text("Evolution")
                     .font(.title3)
                     .fontWeight(.semibold)
                     .textCase(.uppercase)
                 HStack {
-                    ForEach(Array(pokemon!.evolution.enumerated()), id: \.element) {
+                    ForEach(Array(pokemonState.pokemon!.evolution.enumerated()), id: \.element) {
                         index, item in
                         EvolutionColumn(evolution: item)
-                        if index < (pokemon!.evolution.count - 1) {
+                        if index < (pokemonState.pokemon!.evolution.count - 1) {
                             Image(systemName: "arrow.right")
                                 .resizable()
                                 .frame(width: 15, height: 15)

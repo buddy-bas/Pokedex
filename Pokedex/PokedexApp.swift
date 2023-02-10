@@ -16,6 +16,10 @@ struct PokedexApp: App {
         WindowGroup {
             ContentView()
                 .environmentObject(model)
+                .environmentObject(model.tabViewState)
+                .environmentObject(model.pokemonState)
+                .environmentObject(model.pokemonListState)
+                .environmentObject(model.favoritesState)
         }
     }
 }

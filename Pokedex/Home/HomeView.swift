@@ -8,39 +8,32 @@
 import SwiftUI
 
 struct HomeView: View {
+    @EnvironmentObject var pokemonListState: PokemonListState
     @EnvironmentObject var model: Model
-
+    
     var body: some View {
-        NavigationView {
-            if let pokemonList = model.pokemonList?.results {
-                List(Array(pokemonList.enumerated()), id: \.offset) { index, item in
-                    ListViewItem(name: item.name, detailUrl: item.url, pokemonId: index + 1)
-                        .buttonStyle(.bordered)
-                        .background(NavigationLink("", destination: DetailView(url: item.url))
-                            .opacity(0))
-                        .task {
-                            if index == model.pokemonList!.results.count - 2 {
-                                await loadMore()
-                            }
+        let _ = Self._printChanges()
+        if let pokemonList = pokemonListState.pokemonList?.results {
+            List(Array(pokemonList.enumerated()), id: \.element.url) { index, item in
+                ListViewItem(name: item.name, detailUrl: item.url, pokemonId: index + 1)
+                    .background(NavigationLink("", destination: DetailView(url: item.url))
+                        .opacity(0))
+                    .task {
+                        if index == pokemonListState.pokemonList!.results.count - 2 {
+                            await loadMore()
                         }
-                }
+                    }
             }
-        }
-        .task {
-            do {
-                try await model.loadPokemonList(url: "https://pokeapi.co/api/v2/pokemon?limit=30&offset=0")
-
-            } catch {
-                print(error)
-            }
+        } else {
+            Text("Empty")
         }
     }
-
+    
     private func loadMore() async {
         do {
-            let nextData = try await model.services.pokemonService.getPokemonList(url: model.pokemonList!.next)
-            model.pokemonList!.results += nextData.results
-            model.pokemonList!.next = nextData.next
+            let nextData = try await model.services.pokemonService.getPokemonList(url: pokemonListState.pokemonList!.next)
+            pokemonListState.pokemonList!.results += nextData.results
+            pokemonListState.pokemonList!.next = nextData.next
         } catch {
             print(error)
         }

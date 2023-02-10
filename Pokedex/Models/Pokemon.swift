@@ -16,13 +16,15 @@ struct Pokemon: Codable {
 
 // MARK: - PokemonListItem
 
-struct PokemonListItem: Codable, Identifiable {
+struct PokemonListItem: Codable, Identifiable, Hashable {
 
     var id: UUID {
         UUID()
     }
 
     let name, url: String
+    var pokemonId:Int?
+    var isFavorite:Bool?
 }
 
 // MARK: - PokemonList

@@ -8,11 +8,10 @@
 import SwiftUI
 
 struct TypeCardList: View {
-    @EnvironmentObject var model:Model
+    @EnvironmentObject var pokemonState: PokemonState
     var body: some View {
-        let pokemon = model.pokemon
         HStack(spacing: 8) {
-            ForEach(pokemon?.detail.types ?? []) {
+            ForEach(pokemonState.pokemon?.detail.types ?? []) {
                 item in
                 VStack {
                     TypeCard(name: item.type.name.rawValue, icon: item.type.typeDetail.image, borderColor: item.type.typeDetail.color)
