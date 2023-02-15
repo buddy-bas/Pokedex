@@ -7,26 +7,62 @@
 
 import SwiftUI
 
+
 struct FavoritesView: View {
-    @EnvironmentObject var model: Model
-    
+    @EnvironmentObject private var pokemonListState: PokemonListState
+
+    @State private var showAlert = false
+    @State private var removeIndex = -1
+
+    var favoritesPokemon: [PokemonListItem] {
+        let filtered = pokemonListState.pokemonList.results.filter { PokemonListItem in
+            PokemonListItem.isFavorite ?? false
+        }
+        let sorted = filtered.sorted { $0.favoritedDate! < $1.favoritedDate! }
+        return sorted
+    }
+
+    let columns = [
+        GridItem(.flexible()),
+        GridItem(.flexible()),
+    ]
 
     var body: some View {
-        if model.favoritesState.favorites.count > 0 {
-            List {
-                ForEach(Array(model.favoritesState.favorites.enumerated()), id: \.offset) { index, item in
-                    ListViewItem(name: item.name, detailUrl: item.url, pokemonId: item.pokemonId!, showFavoriteIcon: false)
-                        .swipeActions(allowsFullSwipe: true) {
-                            Button(role: .destructive) {
-                                model.favoritesState.favorites.remove(at: index)
-                            } label: {
-                                Label("Delete", systemImage: "trash")
+        let _ = Self._printChanges()
+        ScrollView {
+            LazyVGrid(columns: columns, spacing: 16
+            ) {
+                ForEach(favoritesPokemon, id: \.url) { item in
+                    NavigationLink{
+                        DetailView(url: item.url)
+                    }label: {
+                        FavoriteGridItem(detailUrl: item.url, name: item.name)
+                            .contextMenu {
+                                Button(role: .destructive) {
+                                    showAlert = true
+                                    removeIndex = pokemonListState.pokemonList.results.firstIndex { PokemonListItem in
+                                        PokemonListItem.url == item.url
+                                    }!
+
+                                } label: {
+                                    Label("Unfavorite Pokémon", systemImage: "star.slash")
+                                }
                             }
-                        }
+                            .transition(.move(edge: .trailing))
+                    }
+                    .buttonStyle(FlatLinkStyle())
                 }
+                .alert("", isPresented: $showAlert, actions: {
+                    Button("Unfavorite", role: .destructive, action: {
+                        withAnimation {
+                            pokemonListState.pokemonList.results[removeIndex].isFavorite = false
+                        }
+                    })
+                }, message: {
+                    Text("Are you sure you want to unfavorite this Pokémon?")
+                })
             }
-        } else {
-            Text("empty")
+            .padding(.horizontal)
         }
     }
 }

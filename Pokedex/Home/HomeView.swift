@@ -9,31 +9,54 @@ import SwiftUI
 
 struct HomeView: View {
     @EnvironmentObject var pokemonListState: PokemonListState
-    @EnvironmentObject var model: Model
-    
+    @EnvironmentObject var favoritesState: FavoritesState
+    let services = Services()
+
     var body: some View {
         let _ = Self._printChanges()
-        if let pokemonList = pokemonListState.pokemonList?.results {
+        let pokemonList = pokemonListState.pokemonList.results
+        if !pokemonList.isEmpty {
             List(Array(pokemonList.enumerated()), id: \.element.url) { index, item in
-                ListViewItem(name: item.name, detailUrl: item.url, pokemonId: index + 1)
-                    .background(NavigationLink("", destination: DetailView(url: item.url))
-                        .opacity(0))
-                    .task {
-                        if index == pokemonListState.pokemonList!.results.count - 2 {
-                            await loadMore()
+                ListViewItem(name: item.name, detailUrl: item.url, pokemonId: index + 1, isSet: Binding(
+                    get: {  self.pokemonListState.pokemonList.results[index].isFavorite ?? false },
+                    set: {
+                        self.pokemonListState.pokemonList.results[index].isFavorite = $0
+                        if $0 {
+                            self.pokemonListState.pokemonList.results[index].favoritedDate = Date()
                         }
+                       
                     }
+                ))
+                .background(NavigationLink("", destination: DetailView(url: item.url))
+                    .opacity(0))
+                .task {
+                    if index == pokemonListState.pokemonList.results.count - 2 {
+                        await loadMore()
+                    }
+                }
             }
         } else {
             Text("Empty")
         }
     }
-    
+
+    private func onPressFavorite(value: Bool, index: Int) {
+        let data = pokemonListState.pokemonList.results[index]
+        if value {
+            favoritesState.favorites.append(PokemonListItem(name: data.name, url: data.url, pokemonId: index + 1))
+        } else {
+            let removeIndex = favoritesState.favorites.firstIndex { item in
+                item.url == data.url
+            }!
+            favoritesState.favorites.remove(at: removeIndex)
+        }
+    }
+
     private func loadMore() async {
         do {
-            let nextData = try await model.services.pokemonService.getPokemonList(url: pokemonListState.pokemonList!.next)
-            pokemonListState.pokemonList!.results += nextData.results
-            pokemonListState.pokemonList!.next = nextData.next
+            let nextData = try await services.pokemonService.getPokemonList(url: pokemonListState.pokemonList.next)
+            pokemonListState.pokemonList.results += nextData.results
+            pokemonListState.pokemonList.next = nextData.next
         } catch {
             print(error)
         }
@@ -45,5 +68,7 @@ struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
         HomeView()
             .environmentObject(model)
+            .environmentObject(model.pokemonState)
+            .environmentObject(model.pokemonListState)
     }
 }

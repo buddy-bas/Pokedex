@@ -10,7 +10,7 @@ import SwiftUI
 
 @main
 struct PokedexApp: App {
-    @StateObject private var model = Model(services: Services())
+    @StateObject private var model = Model()
 
     var body: some Scene {
         WindowGroup {

@@ -20,7 +20,6 @@ struct TabBarNavigation: View {
                     }
                     .tag(1)
                 FavoritesView()
-                    .font(.system(size: 30, weight: .bold, design: .rounded))
                     .tabItem {
                         Image(systemName: "star")
                         Text("Favorite")
@@ -45,5 +44,9 @@ struct TabBarNavigation_Previews: PreviewProvider {
     static var previews: some View {
         TabBarNavigation()
             .environmentObject(model)
+            .environmentObject(model.tabViewState)
+            .environmentObject(model.pokemonState)
+            .environmentObject(model.pokemonListState)
+            .environmentObject(model.favoritesState)
     }
 }

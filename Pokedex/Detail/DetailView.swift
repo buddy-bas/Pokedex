@@ -10,8 +10,9 @@ import SwiftUI
 
 struct DetailView: View {
     @Environment(\.safeAreaInsets) private var safeAreaInsets
-    @EnvironmentObject var pokemonState: PokemonState
-    @EnvironmentObject var model: Model
+    @EnvironmentObject private var pokemonState: PokemonState
+    @EnvironmentObject private var pokemonListState: PokemonListState
+    @EnvironmentObject private var model: Model
     @State private var loading = true
     var url: String
 
@@ -110,17 +111,25 @@ struct DetailView: View {
 
 struct DetailView_Previews: PreviewProvider {
     static let model = Model()
+    static let pokemonState = PokemonState()
+    static let pokemonListState = PokemonListState()
     static var previews: some View {
         DetailView(url: "https://pokeapi.co/api/v2/pokemon/10")
             .environmentObject(model)
+            .environmentObject(pokemonListState)
+            .environmentObject(pokemonState)
             .previewDevice(PreviewDevice(rawValue: "iPhone 14 Pro Max"))
             .previewDisplayName("iPhone 14 Pro Max")
         DetailView(url: "https://pokeapi.co/api/v2/pokemon/10")
             .environmentObject(model)
+            .environmentObject(pokemonListState)
+            .environmentObject(pokemonState)
             .previewDevice(PreviewDevice(rawValue: "iPhone 14"))
             .previewDisplayName("iPhone 14")
         DetailView(url: "https://pokeapi.co/api/v2/pokemon/10")
             .environmentObject(model)
+            .environmentObject(pokemonListState)
+            .environmentObject(pokemonState)
             .previewDevice(PreviewDevice(rawValue: "iPhone SE (3rd generation)"))
             .previewDisplayName("iPhone SE")
     }

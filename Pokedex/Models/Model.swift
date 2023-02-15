@@ -8,18 +8,11 @@
 import Foundation
 
 class Model: ObservableObject {
-    var services: Services
+    var services = Services()
     var tabViewState = TabViewState()
     var pokemonState = PokemonState()
     var pokemonListState = PokemonListState()
     var favoritesState = FavoritesState()
-   
-   
-    
-
-    init(services: Services = Services(pokemonService: PokemonService())) {
-        self.services = services
-    }
 }
 
 // MARK: - Pokemon API
@@ -59,16 +52,16 @@ extension Model {
             }
             var evoArr = [Evolution]()
             for try await result in group {
-                let evoDetail = try await services.pokemonService.getPokemonDetail(from:"https://pokeapi.co/api/v2/pokemon/\(result.id)")
+                let evoDetail = try await services.pokemonService.getPokemonDetail(from: "https://pokeapi.co/api/v2/pokemon/\(result.id)")
                 evoArr.append(Evolution(id: evoDetail.id, name: evoDetail.name, spriteUrl: evoDetail.sprites.frontDefault ?? ""))
             }
             return evoArr.sorted { $0.id < $1.id }
         }
         pokemonState.pokemon?.evolution = evolution
     }
-    
+
     @MainActor
-    func loadPokemonList(url:String) async throws {
+    func loadPokemonList(url: String) async throws {
         // get pokemon list
         let pokemonList = try await services.pokemonService.getPokemonList(url: url)
         pokemonListState.pokemonList = pokemonList
@@ -78,7 +71,6 @@ extension Model {
 // MARK: - Manage favorites
 
 extension Model {
-    
 }
 
 enum Tabs {
@@ -87,19 +79,17 @@ enum Tabs {
 }
 
 class TabViewState: ObservableObject {
-  
-  @Published var selectedTab: Tabs = .home
+    @Published var selectedTab: Tabs = .home
 }
-
 
 class PokemonState: ObservableObject {
     @Published var pokemon: Pokemon?
 }
+
 class PokemonListState: ObservableObject {
-    @Published var pokemonList: PokemonList?
+    @Published var pokemonList: PokemonList = PokemonList(count: 0, results: [], next: "")
 }
 
 class FavoritesState: ObservableObject {
     @Published var favorites: [PokemonListItem] = []
 }
-

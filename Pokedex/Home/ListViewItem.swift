@@ -7,18 +7,21 @@
 
 import SwiftUI
 
-struct ListViewItem: View {
+struct ListViewItem: View,Equatable {
+    let services = Services()
+    
     let name: String
     let detailUrl: String
     let pokemonId: Int
-    var showFavoriteIcon: Bool = true
+    
+    @Binding var isSet:Bool
+    
     @State private var imageUrl = ""
-    @State private var isSet = false
-    @State private var types:[TypeElement] = []
-    @EnvironmentObject var model:Model
+    @State private var types: [TypeElement] = []
     
     var body: some View {
         let _ = Self._printChanges()
+
         HStack {
             Text("\(pokemonId)")
                 .font(.subheadline)
@@ -31,7 +34,6 @@ struct ListViewItem: View {
             .scaledToFit()
             .frame(width: 40, height: 40)
             .padding(4)
-            .clipShape(Circle())
             Text(name)
                 .font(.subheadline)
                 .fontWeight(.medium)
@@ -45,36 +47,37 @@ struct ListViewItem: View {
                         .frame(width: 20, height: 20)
                 }
             }
-            if showFavoriteIcon {
-                Spacer()
-                FavoriteButton(isSet: $isSet)
+            Spacer()
+            Button {
+            } label: {
+                Label("Toggle Favorite", systemImage: isSet ? "star.fill" : "star")
+                    .labelStyle(.iconOnly)
+                    .foregroundColor(isSet ? .yellow : .gray)
+            }
+            .onTapGesture {
+                isSet.toggle()
             }
         }
         .task {
             do {
-                let url = URL(string: detailUrl)!
-                let (data, response) = try await URLSession.shared.data(from: url)
-
-                guard let httpResponse = response as? HTTPURLResponse,
-                      httpResponse.statusCode == 200 else {
-                    throw "\(#function) invalidServerResponse"
-                }
-                guard let decodedResponse = try? JSONDecoder().decode(PokemonDetail.self, from: data) else {
-                    throw "Can't decode \(#function)."
-                }
-                types =  decodedResponse.types
+                let  decodedResponse = try await services.pokemonService.getPokemonDetail(from: detailUrl)
+                types = decodedResponse.types
                 imageUrl = decodedResponse.sprites.frontDefault ?? ""
-
 
             } catch {
                 print(error)
             }
         }
     }
+    
+    static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.isSet == rhs.isSet
+    }
+
 }
 
 struct ListViewItem_Previews: PreviewProvider {
     static var previews: some View {
-        ListViewItem(name: "TEST", detailUrl: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png", pokemonId: 1)
+        ListViewItem(name: "TEST", detailUrl: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png", pokemonId: 1, isSet: .constant(false))
     }
 }
