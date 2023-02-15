@@ -7,18 +7,18 @@
 
 import SwiftUI
 
-struct ListViewItem: View,Equatable {
+struct ListViewItem: View, Equatable {
     let services = Services()
-    
+
     let name: String
     let detailUrl: String
     let pokemonId: Int
-    
-    @Binding var isSet:Bool
-    
+
+    @Binding var isSet: Bool
+
     @State private var imageUrl = ""
     @State private var types: [TypeElement] = []
-    
+
     var body: some View {
         let _ = Self._printChanges()
 
@@ -26,10 +26,18 @@ struct ListViewItem: View,Equatable {
             Text("\(pokemonId)")
                 .font(.subheadline)
                 .fontWeight(.bold)
-            AsyncImage(url: URL(string: imageUrl)) { image in
-                image.resizable()
-            } placeholder: {
-                ProgressView()
+            AsyncImage(url: URL(string: imageUrl)) { phase in
+                if let image = phase.image {
+                    image
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                } else if phase.error != nil {
+                    Image("Pokeball_Black")
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                } else {
+                    ProgressView()
+                }
             }
             .scaledToFit()
             .frame(width: 40, height: 40)
@@ -60,7 +68,7 @@ struct ListViewItem: View,Equatable {
         }
         .task {
             do {
-                let  decodedResponse = try await services.pokemonService.getPokemonDetail(from: detailUrl)
+                let decodedResponse = try await services.pokemonService.getPokemonDetail(from: detailUrl)
                 types = decodedResponse.types
                 imageUrl = decodedResponse.sprites.frontDefault ?? ""
 
@@ -69,11 +77,10 @@ struct ListViewItem: View,Equatable {
             }
         }
     }
-    
+
     static func == (lhs: Self, rhs: Self) -> Bool {
         lhs.isSet == rhs.isSet
     }
-
 }
 
 struct ListViewItem_Previews: PreviewProvider {

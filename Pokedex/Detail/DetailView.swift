@@ -5,7 +5,6 @@
 //  Created by Bundit Thakummee on 15/1/2566 BE.
 //
 
-
 import SwiftUI
 
 struct DetailView: View {
@@ -13,11 +12,11 @@ struct DetailView: View {
     @EnvironmentObject private var pokemonState: PokemonState
     @EnvironmentObject private var pokemonListState: PokemonListState
     @EnvironmentObject private var model: Model
-    
+
     @State private var loading = true
-    
+
     var url: String
-    
+
     var body: some View {
         let _ = Self._printChanges()
         HStack {
@@ -25,10 +24,17 @@ struct DetailView: View {
                 ScrollView(showsIndicators: false) {
                     VStack(spacing: 0) {
                         GeometryReader { geo in
-                            AsyncImage(url: URL(string: pokemonState.pokemon!.detail.sprites.frontDefault ?? "")) { image in
-                                image.resizable()
-                            } placeholder: {
-                                ProgressView()
+                            AsyncImage(url: URL(string: pokemonState.pokemon!.detail.sprites.frontDefault ?? "")) { phase in
+                                if let image = phase.image {
+                                    image
+                                        .resizable()
+                                } else if phase.error != nil {
+                                    Image("Pokeball_Black")
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fill)
+                                } else {
+                                    ProgressView()
+                                }
                             }
                             .scaledToFit()
                             .padding(.top, safeAreaInsets.top)

@@ -32,10 +32,17 @@ struct FavoriteGridItem: View {
                     }
                 }
                 Spacer()
-                AsyncImage(url: URL(string: imageUrl)) { image in
-                    image.resizable()
-                } placeholder: {
-                    ProgressView()
+                AsyncImage(url: URL(string: imageUrl)) { phase in
+                    if let image = phase.image {
+                        image
+                            .resizable()
+                    } else if phase.error != nil {
+                        Image("Pokeball_Black")
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                    } else {
+                        ProgressView()
+                    }
                 }
                 .scaledToFit()
                 .frame(width: 80, height: 80)
