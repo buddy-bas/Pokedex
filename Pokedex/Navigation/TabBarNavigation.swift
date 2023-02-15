@@ -15,8 +15,9 @@ struct TabBarNavigation: View {
             TabView(selection: $selection) {
                 HomeView()
                     .tabItem {
-                        Image(systemName: "house.fill")
+                        Image(systemName: "list.bullet")
                         Text("Pokémon")
+                           
                     }
                     .tag(1)
                 FavoritesView()
@@ -26,7 +27,9 @@ struct TabBarNavigation: View {
                     }
                     .tag(2)
             }
+            .navigationBarTitle(selection == 1 ? "Pokémon" : "")
         }
+        
         .task {
             do {
                 print("call")

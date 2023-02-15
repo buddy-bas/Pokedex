@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-
 struct FavoritesView: View {
     @EnvironmentObject private var pokemonListState: PokemonListState
 
@@ -30,13 +29,19 @@ struct FavoritesView: View {
     var body: some View {
         let _ = Self._printChanges()
         ScrollView {
+            Text("Favorite")
+                .font(.largeTitle)
+                .fontWeight(.bold)
+                .padding(.leading)
+                .padding(.top,32)
+                .frame(maxWidth: .infinity, alignment: .leading)
             LazyVGrid(columns: columns, spacing: 16
             ) {
                 ForEach(favoritesPokemon, id: \.url) { item in
-                    NavigationLink{
+                    NavigationLink {
                         DetailView(url: item.url)
-                    }label: {
-                        FavoriteGridItem(detailUrl: item.url, name: item.name)
+                    } label: {
+                        FavoriteGridItem(detailUrl: item.url, name: item.name.capitalized)
                             .contextMenu {
                                 Button(role: .destructive) {
                                     showAlert = true
@@ -72,5 +77,6 @@ struct FavoritesView_Previews: PreviewProvider {
     static var previews: some View {
         FavoritesView()
             .environmentObject(model)
+            .environmentObject(model.pokemonListState)
     }
 }

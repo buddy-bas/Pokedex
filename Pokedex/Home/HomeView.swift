@@ -7,36 +7,37 @@
 
 import SwiftUI
 
+struct Re: Identifiable {
+    let id = UUID()
+    let name: String
+}
+
 struct HomeView: View {
-    @EnvironmentObject var pokemonListState: PokemonListState
-    @EnvironmentObject var favoritesState: FavoritesState
+    @EnvironmentObject private var pokemonListState: PokemonListState
+    @EnvironmentObject private var favoritesState: FavoritesState
+
     let services = Services()
 
     var body: some View {
         let _ = Self._printChanges()
         let pokemonList = pokemonListState.pokemonList.results
-        if !pokemonList.isEmpty {
-            List(Array(pokemonList.enumerated()), id: \.element.url) { index, item in
-                ListViewItem(name: item.name, detailUrl: item.url, pokemonId: index + 1, isSet: Binding(
-                    get: {  self.pokemonListState.pokemonList.results[index].isFavorite ?? false },
-                    set: {
-                        self.pokemonListState.pokemonList.results[index].isFavorite = $0
-                        if $0 {
-                            self.pokemonListState.pokemonList.results[index].favoritedDate = Date()
-                        }
-                       
-                    }
-                ))
-                .background(NavigationLink("", destination: DetailView(url: item.url))
-                    .opacity(0))
-                .task {
-                    if index == pokemonListState.pokemonList.results.count - 2 {
-                        await loadMore()
+        List(Array(pokemonList.enumerated()), id: \.element.url) { index, item in
+            ListViewItem(name: item.name.capitalized, detailUrl: item.url, pokemonId: index + 1, isSet: Binding(
+                get: { self.pokemonListState.pokemonList.results[index].isFavorite ?? false },
+                set: {
+                    self.pokemonListState.pokemonList.results[index].isFavorite = $0
+                    if $0 {
+                        self.pokemonListState.pokemonList.results[index].favoritedDate = Date()
                     }
                 }
+            ))
+            .background(NavigationLink("", destination: DetailView(url: item.url))
+                .opacity(0))
+            .task {
+                if index == pokemonListState.pokemonList.results.count - 2 {
+                    await loadMore()
+                }
             }
-        } else {
-            Text("Empty")
         }
     }
 

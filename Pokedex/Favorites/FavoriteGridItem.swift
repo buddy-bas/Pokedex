@@ -8,12 +8,13 @@
 import SwiftUI
 
 struct FavoriteGridItem: View {
-    let detailUrl: String
-    let name: String
-    let services = Services()
-
     @State private var imageUrl = ""
     @State private var types: [TypeElement] = []
+
+    private let services = Services()
+
+    let detailUrl: String
+    let name: String
 
     var body: some View {
         VStack {
@@ -23,12 +24,12 @@ struct FavoriteGridItem: View {
                 .lineLimit(2)
             HStack {
                 HStack(spacing: 4) {
-                        ForEach(types) { item in
-                            item.type.typeDetail.image
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 20, height: 20)
-                        }
+                    ForEach(types) { item in
+                        item.type.typeDetail.image
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 20, height: 20)
+                    }
                 }
                 Spacer()
                 AsyncImage(url: URL(string: imageUrl)) { image in
