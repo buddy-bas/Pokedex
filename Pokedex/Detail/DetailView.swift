@@ -9,6 +9,7 @@ import SwiftUI
 
 struct DetailView: View {
     @Environment(\.safeAreaInsets) private var safeAreaInsets
+    @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var pokemonState: PokemonState
     @EnvironmentObject private var pokemonListState: PokemonListState
     @EnvironmentObject private var model: Model
@@ -44,7 +45,6 @@ struct DetailView: View {
                             .offset(x: 0, y: GeometryHelper.getOffsetForHeaderImage(geo))
                         }
                         .frame(height: 300)
-
                         VStack(spacing: 0) {
                             Text(pokemonState.pokemon!.detail.name.capitalized)
                                 .font(.title2)
@@ -100,7 +100,8 @@ struct DetailView: View {
                 }
 
             } else {
-                Text("Loading")
+                LottieView(lottieFile: "pokeball_loading", loopMode: .loop)
+                    .frame(width: 70, height: 70)
             }
         }
         .task {
@@ -113,6 +114,17 @@ struct DetailView: View {
                 loading = false
             }
         }
+        .navigationBarBackButtonHidden(true)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Image(systemName: "chevron.left")
+                    .font(Font.system(size: 16).weight(.medium))
+                    .onTapGesture {
+                        dismiss()
+                    }
+            }
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(.white)
         .ignoresSafeArea()
     }

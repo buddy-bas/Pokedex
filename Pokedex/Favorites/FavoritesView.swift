@@ -28,46 +28,58 @@ struct FavoritesView: View {
 
     var body: some View {
         let _ = Self._printChanges()
-        ScrollView {
-            Text("Favorite")
-                .font(.largeTitle)
-                .fontWeight(.bold)
-                .padding(.leading)
-                .padding(.top,32)
-                .frame(maxWidth: .infinity, alignment: .leading)
-            LazyVGrid(columns: columns, spacing: 16
-            ) {
-                ForEach(favoritesPokemon, id: \.url) { item in
-                    NavigationLink {
-                        DetailView(url: item.url)
-                    } label: {
-                        FavoriteGridItem(detailUrl: item.url, name: item.name.capitalized)
-                            .contextMenu {
-                                Button(role: .destructive) {
-                                    showAlert = true
-                                    removeIndex = pokemonListState.pokemonList.results.firstIndex { PokemonListItem in
-                                        PokemonListItem.url == item.url
-                                    }!
-
-                                } label: {
-                                    Label("Unfavorite Pokémon", systemImage: "star.slash")
-                                }
-                            }
-                            .transition(.move(edge: .trailing))
-                    }
-                    .buttonStyle(FlatLinkStyle())
-                }
-                .alert("", isPresented: $showAlert, actions: {
-                    Button("Unfavorite", role: .destructive, action: {
-                        withAnimation {
-                            pokemonListState.pokemonList.results[removeIndex].isFavorite = false
-                        }
-                    })
-                }, message: {
-                    Text("Are you sure you want to unfavorite this Pokémon?")
-                })
+        if favoritesPokemon.count == 0 {
+            VStack {
+                Image(systemName: "star.slash")
+                    .resizable()
+                    .frame(width: 80, height: 80)
+                    .padding(.bottom, 16)
+                Text("No favorites found")
+                    .font(.title2)
+                    .fontWeight(.medium)
             }
-            .padding(.horizontal)
+        } else {
+            ScrollView {
+                Text("Favorite")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .padding(.leading)
+                    .padding(.top, 32)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                LazyVGrid(columns: columns, spacing: 16
+                ) {
+                    ForEach(favoritesPokemon, id: \.url) { item in
+                        NavigationLink {
+                            DetailView(url: item.url)
+                        } label: {
+                            FavoriteGridItem(detailUrl: item.url, name: item.name.capitalized)
+                                .contextMenu {
+                                    Button(role: .destructive) {
+                                        showAlert = true
+                                        removeIndex = pokemonListState.pokemonList.results.firstIndex { PokemonListItem in
+                                            PokemonListItem.url == item.url
+                                        }!
+
+                                    } label: {
+                                        Label("Unfavorite Pokémon", systemImage: "star.slash")
+                                    }
+                                }
+                                .transition(.move(edge: .trailing))
+                        }
+                        .buttonStyle(FlatLinkStyle())
+                    }
+                    .alert("", isPresented: $showAlert, actions: {
+                        Button("Unfavorite", role: .destructive, action: {
+                            withAnimation {
+                                pokemonListState.pokemonList.results[removeIndex].isFavorite = false
+                            }
+                        })
+                    }, message: {
+                        Text("Are you sure you want to unfavorite this Pokémon?")
+                    })
+                }
+                .padding(.horizontal)
+            }
         }
     }
 }
