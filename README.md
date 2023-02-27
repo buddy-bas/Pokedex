@@ -1,2 +1,2 @@
-# Pokedex
+# Pokédex
 Powered by SwiftUI
