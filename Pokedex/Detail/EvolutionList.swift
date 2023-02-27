@@ -9,28 +9,40 @@ import SwiftUI
 
 struct EvolutionList: View {
     @EnvironmentObject var pokemonState: PokemonState
-    var body: some View {
-        if pokemonState.pokemon?.evolution.count ?? 0 > 0 {
-            VStack(spacing:0){
-                Text("Evolution")
-                    .font(.title3)
-                    .fontWeight(.semibold)
-                    .textCase(.uppercase)
-                HStack {
-                    ForEach(Array(pokemonState.pokemon!.evolution.enumerated()), id: \.element) {
-                        index, item in
-                        EvolutionColumn(evolution: item)
-                        if index < (pokemonState.pokemon!.evolution.count - 1) {
-                            Image(systemName: "arrow.right")
-                                .resizable()
-                                .frame(width: 15, height: 15)
-                        }
-                    }
-                }
-                .padding(.top,8)
-            }
+    
+    let singleColumn = [
+        GridItem(.fixed(120)),
+    ]
+    let doubleColumns = [
+        GridItem(.fixed(120)),
+        GridItem(.fixed(120)),
+    ]
+    let tripleColumns = [
+        GridItem(.flexible()),
+        GridItem(.flexible()),
+        GridItem(.flexible()),
+    ]
+    
+    var columns: [GridItem] {
+        switch pokemonState.pokemon!.evolution.count {
+        case 1:
+           return singleColumn
+
+        case 2:
+            return doubleColumns
+
+        default:
+            return tripleColumns
         }
     }
+
+    var body: some View {
+            LazyVGrid(columns: columns, alignment: .center) {
+                ForEach(Array(pokemonState.pokemon!.evolution.enumerated()), id: \.element.spriteUrl) { _, item in
+                    EvolutionColumn(evolution: item)
+                }
+            }
+        }
 }
 
 struct EvolutionList_Previews: PreviewProvider {

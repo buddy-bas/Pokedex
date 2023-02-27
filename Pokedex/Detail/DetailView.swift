@@ -89,8 +89,14 @@ struct DetailView: View {
                                 }
                                 .padding(.top)
                             }
-                            EvolutionList()
-                                .padding(.top, 24)
+                            VStack(spacing: 0) {
+                                Text("Evolution")
+                                    .font(.title3)
+                                    .fontWeight(.semibold)
+                                    .textCase(.uppercase)
+                                EvolutionList()
+                            }
+                            .padding(.top, 24)
                         }
                         .frame(maxWidth: .infinity)
                         .background(.white)

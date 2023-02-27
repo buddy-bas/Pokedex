@@ -10,14 +10,13 @@ import SwiftUI
 struct EvolutionColumn: View {
     let evolution: Evolution
     var body: some View {
-        VStack {
+        VStack(spacing: 0) {
             AsyncImage(url: URL(string: evolution.spriteUrl)) { image in
                 image.resizable()
             } placeholder: {
                 ProgressView()
             }
             .scaledToFit()
-            
             Text(evolution.name.capitalized)
                 .font(.title3)
         }
