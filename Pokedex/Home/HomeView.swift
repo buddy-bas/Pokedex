@@ -7,11 +7,6 @@
 
 import SwiftUI
 
-struct Re: Identifiable {
-    let id = UUID()
-    let name: String
-}
-
 struct HomeView: View {
     @EnvironmentObject private var pokemonListState: PokemonListState
     @EnvironmentObject private var favoritesState: FavoritesState
@@ -21,23 +16,27 @@ struct HomeView: View {
     var body: some View {
         let _ = Self._printChanges()
         let pokemonList = pokemonListState.pokemonList.results
-        List(Array(pokemonList.enumerated()), id: \.element.url) { index, item in
-            ListViewItem(name: item.name.capitalized, detailUrl: item.url, pokemonId: index + 1, isSet: Binding(
-                get: { self.pokemonListState.pokemonList.results[index].isFavorite ?? false },
-                set: {
-                    self.pokemonListState.pokemonList.results[index].isFavorite = $0
-                    if $0 {
-                        self.pokemonListState.pokemonList.results[index].favoritedDate = Date()
+        List {
+            ForEach(Array(pokemonList.enumerated()), id: \.element.url) { index, item in
+                ListViewItem(name: item.name.capitalized, detailUrl: item.url, pokemonId: index + 1, isSet: Binding(
+                    get: { self.pokemonListState.pokemonList.results[index].isFavorite ?? false },
+                    set: {
+                        self.pokemonListState.pokemonList.results[index].isFavorite = $0
+                        if $0 {
+                            self.pokemonListState.pokemonList.results[index].favoritedDate = Date()
+                        }
+                    }
+                ))
+
+                .background(NavigationLink("", destination: DetailView(url: item.url))
+                    .opacity(0))
+                .task {
+                    if index == pokemonListState.pokemonList.results.count - 2 {
+                        await loadMore()
                     }
                 }
-            ))
-            .background(NavigationLink("", destination: DetailView(url: item.url))
-                .opacity(0))
-            .task {
-                if index == pokemonListState.pokemonList.results.count - 2 {
-                    await loadMore()
-                }
             }
+
         }
     }
 

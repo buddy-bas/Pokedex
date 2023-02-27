@@ -27,7 +27,8 @@ struct TabBarNavigation: View {
                     }
                     .tag(2)
             }
-            .navigationBarTitle(selection == 1 ? "Pokémon" : "")
+            .navigationBarTitle("Pokémon")
+            .navigationBarHidden(selection != 1)
         }
         
         .task {

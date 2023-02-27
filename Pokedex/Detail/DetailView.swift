@@ -120,16 +120,22 @@ struct DetailView: View {
                 loading = false
             }
         }
-        .navigationBarBackButtonHidden(true)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
-                Image(systemName: "chevron.left")
-                    .font(Font.system(size: 16).weight(.medium))
-                    .onTapGesture {
-                        dismiss()
-                    }
+                // this sets the screen title in the navigation bar, when the screen is visible
+                VStack{
+                    Image(systemName: "chevron.left")
+                        .font(Font.system(size: 16).weight(.bold))
+                }
+                .frame(width: 32,height: 32)
+                .onTapGesture {
+                    dismiss()
+                }
             }
         }
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationTitle("") //Fix hidding bar color animation
+        .navigationBarBackButtonHidden(true)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(.white)
         .ignoresSafeArea()
